@@ -3,6 +3,7 @@
 import React from 'react';
 import axios from 'axios';
 import Wther from './Component/Wther'
+import Move from './Component/Move'
 
 
 class App extends React.Component {
@@ -13,6 +14,7 @@ class App extends React.Component {
       imputloction: '',
       showData: false,
       weathersit:[],
+      movesit:[],
 
     }
 
@@ -35,25 +37,32 @@ class App extends React.Component {
     });
     // try {
       let watherdata = await axios.get(`${process.env.REACT_APP_SERVER_LINK}/getDataFromweathwr?CityName=${curntloction}`)
+     
+     
       console.log("ddddddddddd", watherdata);
     // }
     // catch (error) { let watherdata = await axios.get(`https://firstapplicationformansour.herokuapp.com/getDataFromweathwr?CityName=${curntloction}`) }
 
     await this.setState({
       weathersit:watherdata.data
+      
 
     });
     console.log("22222,this.state",this.state.weathersit);
 
-
-    let dataimg = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&center=${this.state.locationout.lat},${this.state.locationout.lon}`
-
-    let dataresult2 = await axios.get(dataimg);
-    // console.log("rrrrrrrrrrrrr",dataresult2);
+    let movedata = await axios.get(`${process.env.REACT_APP_SERVER_LINK}/getmove?CityName=${curntloction}`)
+    console.log("mmmmm", movedata)
 
 
-  };
+    await this.setState({
+      movesit:movedata.data
+      
 
+    });
+    console.log("444444,this.state",this.state.movesit);
+ };
+
+ 
 
   render() {
 
@@ -76,6 +85,7 @@ class App extends React.Component {
       {this.state.showData && <img src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&center=${this.state.locationout.lat},${this.state.locationout.lon}`} alt="" />}
 
       <Wther arraydata={this.state.weathersit}/>
+      <Move arraydata={this.state.movesit}/>
 
 
 
